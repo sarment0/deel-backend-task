@@ -1,10 +1,18 @@
 const request = require("supertest");
 const app = require("../app");
 const { sequelize } = require("../model");
-const { Job, Profile } = sequelize.models;
-
+const { Job, Profile, Contract } = sequelize.models;
+var contractor, client, contract;
 //Tests - Pay for a Job
 describe("POST /jobs/:job_id/pay", () => {
+  beforeAll(async () => {
+    await sequelize.sync({ force: true });
+  });
+
+  afterAll(async () => {
+    await sequelize.close();
+  });
+
   test("should pay for a job successfully", async () => {
     const { Job, Profile, Contract } = app.get("models");
     const contractor = await Profile.create({

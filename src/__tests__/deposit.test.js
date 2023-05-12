@@ -5,8 +5,11 @@ const { Job, Profile, Contract } = sequelize.models;
 var contractor, client, contract;
 
 describe("POST /balances/deposit/:userId", () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await sequelize.sync({ force: true });
+  });
+
+  beforeEach(async () => {
     contractor = await Profile.create({
       firstName: "John",
       lastName: "Doe",
@@ -42,6 +45,10 @@ describe("POST /balances/deposit/:userId", () => {
       paymentDate: null,
       ContractId: contract.id,
     });
+  });
+
+  afterAll(async () => {
+    await sequelize.close();
   });
 
   test("should deposit funds into the user's balance", async () => {
